@@ -2,12 +2,7 @@ package robot1;
 
 
 import java.awt.Graphics2D;
-import robocode.AdvancedRobot;
-import robocode.Robot;
-import robocode.Droid;
-import robocode.Rules;
-import robocode.ScannedRobotEvent;
-import robocode.TeamRobot;
+import robocode.*;
 
 /**
  *
