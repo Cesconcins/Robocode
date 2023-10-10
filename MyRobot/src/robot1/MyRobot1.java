@@ -20,7 +20,6 @@ public class MyRobot1 extends TeamRobot {
     }
 
     private void gestionaRadar() {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     private void gestionaGun() {
