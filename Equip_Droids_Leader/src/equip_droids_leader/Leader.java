@@ -52,6 +52,15 @@ public class Leader extends TeamRobot{
                
     }
     
+    //////////**EVENTS**///////////////
+    
+    
+    private void escanejarEnemics(){
+    //Escanejar amb el radar enemics 
+    
+     turnRadarRight(45);
+    }
+    
     @Override
     public void onScannedRobot(ScannedRobotEvent e){
     //Funcio donada si sha escanejat un ROBOT
@@ -76,25 +85,64 @@ public class Leader extends TeamRobot{
                 enemicX = getX() + Math.sin(e_heading) * e_dis;
                 enemicY = getY() + Math.cos(e_heading) * e_bear;
 
-            Coordenada enemic_trobat=new Coordenada(enemicX,enemicY);
+            Coordenada enemic_disparar=new Coordenada("disparar_enemic",enemicX,enemicY);
 
             try {
-                 out.println("Missatge enviat Droides-Coordenades");
-
-                broadcastMessage(enemic_trobat);
+                out.println("Missatge enviat Droides-Coordenades");
+                broadcastMessage(enemic_disparar);
+                
             } catch (IOException ex) {
                 out.println("Missatge no enviat a Droides!");
             }
         }
     }
     
-    private void escanejarEnemics(){
-    //Escanejar amb el radar enemics 
-    
-     turnRadarRight(45);
+    @Override
+    public void onHitByBullet(HitByBulletEvent e){
+        turnLeft(90+e.getBearing());
     }
     
+    @Override
+    public void onBulletHit(BulletHitEvent e){
+        
+    }
     
+    @Override
+    public void onHitRobot(HitRobotEvent e){
+        String nom=e.getName();
+        //mirar si es Enemic o Teammate
+        if(nom.startsWith("equip_droids_leader.Droids")) {
+         
+          out.println("Xocat amb Droide!"+e.getName());
+          turnRight(180+e.getBearing());    
+        }
+        else{
+                enemicX = getX(); 
+                enemicY = getY();
+
+            Coordenada enemic_xoc=new Coordenada("xoc_enemic",enemicX,enemicY);
+
+            try {
+                out.println("Missatge enviat Droides-Coordenades-XOCAR");
+                broadcastMessage(enemic_xoc);
+                
+            } catch (IOException ex) {
+                out.println("Missatge no enviat a Droides!");
+            }
+
+        }
+        
+    }
+    
+    @Override
+    public void onHitWall(HitWallEvent e){
+        turnRight(90);
+        ahead(50);
+        
+        execute();        
+    }
+    
+   
     public void llista_equip(){
         String[] t= getTeammates();
 

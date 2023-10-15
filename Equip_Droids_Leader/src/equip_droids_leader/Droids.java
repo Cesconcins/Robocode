@@ -35,22 +35,61 @@ public class Droids extends TeamRobot implements Droid{
         return "DroidEquip";
     }
     
+    //////////**EVENTS**///////////////
+
+    
     @Override
     public void onMessageReceived(MessageEvent e){
         
         out.println("MISSATGE REBUT DROID!");
 
-        Serializable missatge=e.getMessage();
-        
+        Serializable missatge=e.getMessage();        
         //mirar si missatge es una coordenada
         if(missatge instanceof Coordenada){
-            Coordenada coo_enemic=(Coordenada) missatge;
-            double eX=coo_enemic.getX();
-            double eY=coo_enemic.getY();
-            
-            out.println("Droid rep coordenades ENEMIC"+eX+","+eY);
+           Coordenada coo_enemic=(Coordenada) missatge;
            
+            String tipus_atac;
+            
+            tipus_atac = ((Coordenada) missatge).getTipus();
+            
+            if (tipus_atac.contains("disparar_enemic")){
+                double eX=coo_enemic.getX();
+                double eY=coo_enemic.getY();
+
+                out.println("Droid rep coordenades ENEMIC Disparar"+eX+","+eY); 
+            }
+            
+            else if(tipus_atac.contains("xoc_enemic")){
+                double eX=coo_enemic.getX();
+                double eY=coo_enemic.getY();
+                
+                out.println("Droid rep coordenades ENEMIC XOCAR"+eX+","+eY); 
+                
+            }
         }
         
+        
     }
+    
+    
+    @Override
+    public void onHitByBullet(HitByBulletEvent e){
+        
+    }
+    
+    @Override
+    public void onBulletHit(BulletHitEvent e){
+        
+    }
+    
+    @Override
+    public void onHitRobot(HitRobotEvent e){
+        
+    }
+    
+    @Override
+    public void onHitWall(HitWallEvent e){
+        
+    }
+    
 }
