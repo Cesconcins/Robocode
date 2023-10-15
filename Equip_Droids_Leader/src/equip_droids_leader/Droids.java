@@ -16,6 +16,10 @@ import java.io.Serializable;
 public class Droids extends TeamRobot implements Droid{
     
     //variables globals
+    private double destiX=-1;
+    private double destiY=-1;
+    private double angledesti=-1;
+    
     
     public void run(){
         out.println("Droid preparat!");
@@ -60,17 +64,37 @@ public class Droids extends TeamRobot implements Droid{
             }
             
             else if(tipus_atac.contains("xoc_enemic")){
-                double eX=coo_enemic.getX();
-                double eY=coo_enemic.getY();
+                destiX=coo_enemic.getX();
+                destiY=coo_enemic.getY();
                 
-                out.println("Droid rep coordenades ENEMIC XOCAR"+eX+","+eY); 
-                
+                out.println("Droid rep coordenades ENEMIC XOCAR"+destiX+","+destiY); 
+                atac_raming();             
             }
         }
         
         
     }
     
+    public void atac_raming(){
+        
+        if(destiX!=-1 && destiY!=-1){
+            angledesti= Math.toDegrees(Math.atan2(destiX - getX(), destiY - getY()));
+            double distanciadesti = Math.hypot(destiX - getX(), destiY - getY());
+
+            turnRight(angledesti - getHeading());
+
+            ahead(distanciadesti);
+            
+            if(distanciadesti<0.3){
+                ram();
+            }
+            
+        }
+    }
+    
+    public void ram(){
+        
+    }
     
     @Override
     public void onHitByBullet(HitByBulletEvent e){
