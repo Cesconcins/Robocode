@@ -17,16 +17,23 @@ public class Droids extends TeamRobot implements Droid{
     
     //variables globals
     
-    @Override
     public void run(){
         out.println("Droid preparat!");
 
         setBodyColor(Color.red);
         setGunColor(Color.red);
-
+        while(true){
+        
+         execute();
+        }
     }
     
     //Droid nomes pot rebre missatges
+    
+    @Override
+    public String getName(){
+        return "equipDroide";   
+    }
     
     @Override
     public void onMessageReceived(MessageEvent e){

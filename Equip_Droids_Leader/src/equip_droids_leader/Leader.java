@@ -52,28 +52,35 @@ public class Leader extends TeamRobot{
     
     public void onScannedRobot(ScannedRobotEvent e){
     //Funcio donada si sha escanejat un ROBOT
-    
+        
         //mirar si es Enemic
-        out.println("ENemic detectat!"+teamLeaderName);
+        if(isTeammate(e.getName())){
+          out.println("Droide detectat!");
+          turnRadarLeft(45);
+           
+        }
+        else{
+             out.println("ENemic detectat!"+teamLeaderName);
 
-        double e_dis=e.getDistance();
-        double e_bear=e.getBearing();
-        
-        double e_heading = getHeadingRadians() + Math.toRadians(e_bear);
+            double e_dis=e.getDistance();
+            double e_bear=e.getBearing();
 
-            enemicX = getX() + Math.sin(e_heading) * e_dis;
-            enemicY = getY() + Math.cos(e_heading) * e_bear;
-        
-        Coordenada enemic_trobat=new Coordenada(enemicX,enemicY);
-       
-        try {
-             out.println("mISSATGE ENVIAT LEADER");
+            double e_heading = getHeadingRadians() + Math.toRadians(e_bear);
 
-            broadcastMessage(enemic_trobat);
-        } catch (IOException ex) {
-            out.println("mISSATGE NO ENVIAT!");
+                enemicX = getX() + Math.sin(e_heading) * e_dis;
+                enemicY = getY() + Math.cos(e_heading) * e_bear;
 
-            Logger.getLogger(Leader.class.getName()).log(Level.SEVERE, null, ex);
+            Coordenada enemic_trobat=new Coordenada(enemicX,enemicY);
+
+            try {
+                 out.println("mISSATGE ENVIAT LEADER");
+
+                broadcastMessage(enemic_trobat);
+            } catch (IOException ex) {
+                out.println("mISSATGE NO ENVIAT!");
+
+                Logger.getLogger(Leader.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     
@@ -81,7 +88,6 @@ public class Leader extends TeamRobot{
     //Escanejar amb el radar enemics 
     
      turnRadarRight(45);
-
     }
     
     
