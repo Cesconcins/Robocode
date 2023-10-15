@@ -39,6 +39,8 @@ public class Leader extends TeamRobot{
 
         out.println("Lider preparat!"+teamLeaderName);
 
+        llista_equip();
+        
         while(true) {
             escanejarEnemics();
             
@@ -50,17 +52,21 @@ public class Leader extends TeamRobot{
                
     }
     
+    @Override
     public void onScannedRobot(ScannedRobotEvent e){
     //Funcio donada si sha escanejat un ROBOT
+        String nom=e.getName();
+        //mirar si es Enemic o Teammate
         
-        //mirar si es Enemic
-        if(isTeammate(e.getName())){
-          out.println("Droide detectat!");
+        if(nom.startsWith("equip_droids_leader.Droids")) {
+         
+          out.println("Droide detectat!"+e.getName());
           turnRadarLeft(45);
            
         }
+        
         else{
-             out.println("ENemic detectat!"+teamLeaderName);
+            out.println("ENEMIC detectat!"+e.getName());
 
             double e_dis=e.getDistance();
             double e_bear=e.getBearing();
@@ -73,13 +79,11 @@ public class Leader extends TeamRobot{
             Coordenada enemic_trobat=new Coordenada(enemicX,enemicY);
 
             try {
-                 out.println("mISSATGE ENVIAT LEADER");
+                 out.println("Missatge enviat Droides-Coordenades");
 
                 broadcastMessage(enemic_trobat);
             } catch (IOException ex) {
-                out.println("mISSATGE NO ENVIAT!");
-
-                Logger.getLogger(Leader.class.getName()).log(Level.SEVERE, null, ex);
+                out.println("Missatge no enviat a Droides!");
             }
         }
     }
@@ -91,5 +95,18 @@ public class Leader extends TeamRobot{
     }
     
     
-   
+    public void llista_equip(){
+        String[] t= getTeammates();
+
+        if (t.length > 0) {
+            out.println("List of Teammates:");
+            for (String teammate : t) {
+                out.println(teammate);
+            }
+        } else {
+            out.println("No teammates detected.");
+        }
+    }
+    
+ 
 }

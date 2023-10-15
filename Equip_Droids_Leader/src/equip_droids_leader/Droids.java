@@ -29,16 +29,16 @@ public class Droids extends TeamRobot implements Droid{
     }
     
     //Droid nomes pot rebre missatges
-    
+
     @Override
     public String getName(){
-        return "equipDroide";   
+        return "DroidEquip";
     }
     
     @Override
     public void onMessageReceived(MessageEvent e){
         
-         out.println("mISSATGE REBUT DROID!");
+        out.println("MISSATGE REBUT DROID!");
 
         Serializable missatge=e.getMessage();
         
