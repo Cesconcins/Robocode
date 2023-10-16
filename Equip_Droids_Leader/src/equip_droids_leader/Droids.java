@@ -18,7 +18,7 @@ public class Droids extends TeamRobot implements Droid{
     //variables globals
     private double destiX=-1;
     private double destiY=-1;
-    private double angledesti=-1;
+    private double destiA=-1;
     
     
     public void run(){
@@ -48,6 +48,7 @@ public class Droids extends TeamRobot implements Droid{
         out.println("MISSATGE REBUT DROID!");
 
         Serializable missatge=e.getMessage();        
+       
         //mirar si missatge es una coordenada
         if(missatge instanceof Coordenada){
            Coordenada coo_enemic=(Coordenada) missatge;
@@ -57,10 +58,12 @@ public class Droids extends TeamRobot implements Droid{
             tipus_atac = ((Coordenada) missatge).getTipus();
             
             if (tipus_atac.contains("disparar_enemic")){
-                double eX=coo_enemic.getX();
-                double eY=coo_enemic.getY();
-
-                out.println("Droid rep coordenades ENEMIC Disparar"+eX+","+eY); 
+                destiX=coo_enemic.getX();
+                destiY=coo_enemic.getY();
+                destiA=coo_enemic.getA();
+                
+                out.println("Droid rep coordenades ENEMIC Disparar"+destiX+","+destiY+", ANGLE: "+destiA); 
+                disparar_enemic();
             }
             
             else if(tipus_atac.contains("xoc_enemic")){
@@ -75,24 +78,32 @@ public class Droids extends TeamRobot implements Droid{
         
     }
     
+    public void disparar_enemic(){
+        
+        
+    }
+    
+    
     public void atac_raming(){
         
         if(destiX!=-1 && destiY!=-1){
-            angledesti= Math.toDegrees(Math.atan2(destiX - getX(), destiY - getY()));
+            destiA= Math.toDegrees(Math.atan2(destiX - getX(), destiY - getY()));
             double distanciadesti = Math.hypot(destiX - getX(), destiY - getY());
 
-            turnRight(angledesti - getHeading());
+            turnRight(destiA - getHeading());
 
             ahead(distanciadesti);
-            
-            if(distanciadesti<0.3){
+          
+            if(distanciadesti<2){
                 ram();
             }
             
         }
     }
     
+    //girar 5 vegades en el punt desti donat- intentar matar enemic
     public void ram(){
+        
         
     }
     
@@ -108,12 +119,18 @@ public class Droids extends TeamRobot implements Droid{
     
     @Override
     public void onHitRobot(HitRobotEvent e){
+        destiX=getX();
+        destiY=getY();
         
+        ram();
     }
     
     @Override
     public void onHitWall(HitWallEvent e){
+        turnRight(90);
+        ahead(100);
         
+        execute();   
     }
     
 }

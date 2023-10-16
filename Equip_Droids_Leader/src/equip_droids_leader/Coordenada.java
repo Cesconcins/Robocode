@@ -13,11 +13,13 @@ public class Coordenada implements Serializable{
     private String tipus; //Tipus d'atac
     private double x;
     private double y;
+    private double a; //angle si important 
     
-    public Coordenada(String t,double x, double y){
+    public Coordenada(String t,double x, double y,double a){
         this.tipus=t;
         this.x =x;
         this.y =y;
+        this.a=a;
     }
     
     public String getTipus(){
@@ -29,5 +31,9 @@ public class Coordenada implements Serializable{
     
     public double getY(){
         return y;
+    }
+    
+    public double getA(){
+        return a;
     }
 }

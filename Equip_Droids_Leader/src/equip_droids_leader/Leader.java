@@ -22,6 +22,7 @@ public class Leader extends TeamRobot{
     //inicialitzar coordenades enemic valors invalids
     double enemicX=-1;
     double enemicY=-1;
+    double enemicA=-1;
     private Coordenada coo_enemic;
     
     protected String teamLeaderName="LIDER1";
@@ -84,8 +85,9 @@ public class Leader extends TeamRobot{
 
                 enemicX = getX() + Math.sin(e_heading) * e_dis;
                 enemicY = getY() + Math.cos(e_heading) * e_bear;
+                enemicA= e.getBearing();
 
-            Coordenada enemic_disparar=new Coordenada("disparar_enemic",enemicX,enemicY);
+            Coordenada enemic_disparar=new Coordenada("disparar_enemic",enemicX,enemicY,enemicA);
 
             try {
                 out.println("Missatge enviat Droides-Coordenades");
@@ -119,8 +121,8 @@ public class Leader extends TeamRobot{
         else{
                 enemicX = getX(); 
                 enemicY = getY();
-
-            Coordenada enemic_xoc=new Coordenada("xoc_enemic",enemicX,enemicY);
+                enemicA = e.getBearing();
+            Coordenada enemic_xoc=new Coordenada("xoc_enemic",enemicX,enemicY,enemicA);
 
             try {
                 out.println("Missatge enviat Droides-Coordenades-XOCAR");
