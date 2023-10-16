@@ -5,6 +5,7 @@
 package equip_droids_leader;
 import robocode.*;
 import java.awt.*;
+import java.io.IOException;
 import java.io.Serializable;
 
 
@@ -19,7 +20,8 @@ public class Droids extends TeamRobot implements Droid{
     private double destiX=-1;
     private double destiY=-1;
     private double destiA=-1;
-    
+    private long   temps=0;
+
     
     public void run(){
         out.println("Droid preparat!");
@@ -27,8 +29,11 @@ public class Droids extends TeamRobot implements Droid{
         setBodyColor(Color.red);
         setGunColor(Color.red);
         while(true){
-        
-         execute();
+            ahead(2250);
+            turnRight(45);
+            ahead(2250);
+            turnLeft(45);
+            execute();
         }
     }
     
@@ -80,6 +85,15 @@ public class Droids extends TeamRobot implements Droid{
     
     public void disparar_enemic(){
         
+        double angle = Math.toDegrees(Math.atan2(destiX - getX(), destiY - getY()));
+        turnGunRight(angle-getGunHeading());
+        
+        fire(3);
+        fire(3);
+
+        
+        destiX=-1;
+        destiY=-1;
         
     }
     
@@ -94,7 +108,7 @@ public class Droids extends TeamRobot implements Droid{
 
             ahead(distanciadesti);
           
-            if(distanciadesti<2){
+            if(distanciadesti>3){ //si lluny ram- fer voltes voltant d'un punt
                 ram();
             }
             
@@ -103,7 +117,19 @@ public class Droids extends TeamRobot implements Droid{
     
     //girar 5 vegades en el punt desti donat- intentar matar enemic
     public void ram(){
+        double angle = Math.toDegrees(Math.atan2(destiX - getX(), destiY - getY()));
+        turnRight(angle-getHeading());
+
+        if (temps==0){
+            temps=getTime();
+            }
+        ahead(20);
+        if(getTime()-temps >=3){
+            destiX=-1;
+            destiY=-1;
+            temps=0;
         
+        }
         
     }
     
@@ -119,16 +145,31 @@ public class Droids extends TeamRobot implements Droid{
     
     @Override
     public void onHitRobot(HitRobotEvent e){
-        destiX=getX();
-        destiY=getY();
+        String nom=e.getName();
+        if(nom.startsWith("equip_droids_leader.Droids") || nom.startsWith("equip_droids_leader.Leader")){
+          turnRight(90);
+          ahead(100);
         
-        ram();
+        }
+        else{
+            Coordenada enemic_disparar=new Coordenada("disparar_enemic",getX(),getY(),e.getBearing());
+            turnLeft(180);
+            ahead(1000);
+            try {
+                out.println("Missatge enviat Droides-Coordenades");
+                broadcastMessage(enemic_disparar);
+                
+            } catch (IOException ex) {
+                out.println("Missatge no enviat a Droides!");
+            }
+            ram();
+        }
     }
     
     @Override
     public void onHitWall(HitWallEvent e){
-        turnRight(90);
-        ahead(100);
+        turnLeft(180);
+        ahead(1000);
         
         execute();   
     }

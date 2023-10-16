@@ -102,12 +102,9 @@ public class Leader extends TeamRobot{
     @Override
     public void onHitByBullet(HitByBulletEvent e){
         turnLeft(90+e.getBearing());
+        ahead(1000);
     }
     
-    @Override
-    public void onBulletHit(BulletHitEvent e){
-        
-    }
     
     @Override
     public void onHitRobot(HitRobotEvent e){
