@@ -105,6 +105,17 @@ public class Leader extends TeamRobot{
         ahead(1000);
     }
     
+    @Override
+    public void onBulletHit(BulletHitEvent e){
+         String nom = e.getName();
+    
+        if (nom.startsWith("equip_droids_leader.Droids")) {
+        out.println("Teammate " + nom + " was hit.");
+        } 
+        else {
+        out.println("Enemy " + nom + " was hit.");
+        }
+    }
     
     @Override
     public void onHitRobot(HitRobotEvent e){
