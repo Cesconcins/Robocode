@@ -65,7 +65,8 @@ public class Droids extends TeamRobot implements Droid{
             if (tipus_atac.contains("disparar_enemic")){
                 destiX=coo_enemic.getX();
                 destiY=coo_enemic.getY();
-                destiA=coo_enemic.getA();
+
+                destiA= Math.toDegrees(Math.atan2(destiX - getX(), destiY - getY()));
                 
                 out.println("Droid rep coordenades ENEMIC Disparar"+destiX+","+destiY+", ANGLE: "+destiA); 
                 disparar_enemic();
@@ -74,7 +75,8 @@ public class Droids extends TeamRobot implements Droid{
             else if(tipus_atac.contains("xoc_enemic")){
                 destiX=coo_enemic.getX();
                 destiY=coo_enemic.getY();
-                
+                destiA= Math.toDegrees(Math.atan2(destiX - getX(), destiY - getY()));
+
                 out.println("Droid rep coordenades ENEMIC XOCAR"+destiX+","+destiY); 
                 atac_raming();             
             }
@@ -101,16 +103,15 @@ public class Droids extends TeamRobot implements Droid{
     public void atac_raming(){
         
         if(destiX!=-1 && destiY!=-1){
-            destiA= Math.toDegrees(Math.atan2(destiX - getX(), destiY - getY()));
             double distanciadesti = Math.hypot(destiX - getX(), destiY - getY());
 
             turnRight(destiA - getHeading());
 
             ahead(distanciadesti);
           
-            if(distanciadesti>3){ //si lluny ram- fer voltes voltant d'un punt
+            /*if(distanciadesti>3){ //si lluny ram- fer voltes voltant d'un punt
                 ram();
-            }
+            }*/
             
         }
     }
@@ -156,11 +157,11 @@ public class Droids extends TeamRobot implements Droid{
             turnLeft(180);
             ahead(1000);
             try {
-                out.println("Missatge enviat Droides-Coordenades");
+                out.println("Missatge enviat TOTS-Coordenades");
                 broadcastMessage(enemic_disparar);
                 
             } catch (IOException ex) {
-                out.println("Missatge no enviat a Droides!");
+                out.println("Missatge no enviat a tots!");
             }
             ram();
         }
