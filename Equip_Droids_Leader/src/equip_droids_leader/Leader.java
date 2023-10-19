@@ -38,6 +38,11 @@ public class Leader extends TeamRobot{
         setGunColor(Color.yellow);
         setRadarColor(Color.green); 
 
+        setAdjustRadarForGunTurn(true);
+        setAdjustRadarForRobotTurn(true);
+        setAdjustGunForRobotTurn(true);
+
+            
         out.println("Lider preparat!"+teamLeaderName);
 
         llista_equip();
@@ -46,7 +51,6 @@ public class Leader extends TeamRobot{
             escanejarEnemics();
             
             setTurnRight(10000);
-            setTurnGunRight(90);
             setAhead(2000);
             execute();
         }
