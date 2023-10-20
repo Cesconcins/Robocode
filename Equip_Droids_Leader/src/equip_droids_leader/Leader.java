@@ -38,11 +38,6 @@ public class Leader extends TeamRobot{
         setGunColor(Color.yellow);
         setRadarColor(Color.green); 
 
-        setAdjustRadarForGunTurn(true);
-        setAdjustRadarForRobotTurn(true);
-        setAdjustGunForRobotTurn(true);
-
-            
         out.println("Lider preparat!"+teamLeaderName);
 
         llista_equip();
@@ -51,6 +46,7 @@ public class Leader extends TeamRobot{
             escanejarEnemics();
             
             setTurnRight(10000);
+            setTurnGunRight(90);
             setAhead(2000);
             execute();
         }
@@ -63,9 +59,15 @@ public class Leader extends TeamRobot{
     private void escanejarEnemics(){
     //Escanejar amb el radar enemics 
     
-     turnRadarRight(45);
+     turnRadarRight(90);
     }
     
+    /*
+    Funcio quan un robot leader escaneja un robot
+    @param ScannedRobotEvent e - escaneja un robot
+    @ return envia un tipus de missatge segons on es trobi el 
+    robot escanejat 
+    */
     @Override
     public void onScannedRobot(ScannedRobotEvent e){
     //Funcio donada si sha escanejat un ROBOT
@@ -103,24 +105,36 @@ public class Leader extends TeamRobot{
         }
     }
     
+    /*
+    Funcio quan un robot leader es tocat per una bala
+    @param HitByBulletEvent e - li toca una bala 
+    */
     @Override
     public void onHitByBullet(HitByBulletEvent e){
         turnLeft(90+e.getBearing());
         ahead(1000);
     }
     
+    /*
+    Funcio quan un robot leader toca un altre robot amb una bala
+    @param BulletHitEvent e - toca una la seva bala a un robot
+    */
     @Override
     public void onBulletHit(BulletHitEvent e){
-         String nom = e.getName();
+        String nom = e.getName();
     
         if (nom.startsWith("equip_droids_leader.Droids")) {
-        out.println("Teammate " + nom + " was hit.");
+        out.println("Teammate " + nom + " disparat.");
         } 
         else {
-        out.println("Enemy " + nom + " was hit.");
+        out.println("Enemic " + nom + " disparat.");
         }
     }
     
+    /*
+    Funcio quan un robot lider xoca toca un altre robot amb una bala
+    @param HitRobotEvent e - toca robot
+    */
     @Override
     public void onHitRobot(HitRobotEvent e){
         String nom=e.getName();
@@ -148,6 +162,10 @@ public class Leader extends TeamRobot{
         
     }
     
+    /*
+    Funcio quan un robot leader toca una paret
+    @param HitWallEvent e - toca paret
+    */
     @Override
     public void onHitWall(HitWallEvent e){
         turnRight(90);
@@ -157,6 +175,11 @@ public class Leader extends TeamRobot{
     }
     
    
+    /*
+    Funcio llista del equip
+    @param -
+    @return posa per pantalla la llista dels robots del equip
+    */
     public void llista_equip(){
         String[] t= getTeammates();
 

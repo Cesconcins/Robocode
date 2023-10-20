@@ -7,54 +7,43 @@ import robocode.*;
 import java.awt.*;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import static robocode.util.Utils.normalRelativeAngleDegrees;
+
 
 /**
  *
  * @author usuario
- * Mes vida  q leader no tenen radar
+ *
  */
 public class Droids extends TeamRobot implements Droid{
     
     //variables globals
-    private final double fieldX=getBattleFieldWidth();
-    private final double fieldY= getBattleFieldHeight();
-    
-    //Coordenades Enemics
     private double destiX=-1;
     private double destiY=-1;
     private double destiA=-1;
-    double distance_enemy=-1;
-    
-    
     private long   temps=0;
-    private double direction=1;   //direccio de la rotacio
+
     
-    
-    @Override
     public void run(){
         out.println("Droid preparat!");
 
         setBodyColor(Color.red);
         setGunColor(Color.red);
-        
-        setAdjustGunForRobotTurn(true);
-
-        
         while(true){
-            setAhead((distance_enemy /4 + 25) *direction);
-          /*  if(xoc_paret(3)){
-                direction*=-1;
-            }
-                  */      
+            ahead(2250);
+            turnRight(45);
+            ahead(2250);
+            turnLeft(45);
             execute();
         }
     }
     
     //Droid nomes pot rebre missatges
 
+    /*
+    Funcio nom droid
+    @param -
+    @return el nom del droid- noms iguals per cada droid del equip
+    */
     @Override
     public String getName(){
         return "DroidEquip";
@@ -63,6 +52,11 @@ public class Droids extends TeamRobot implements Droid{
     //////////**EVENTS**///////////////
 
     
+    /*
+    Funcio quan un robot droid rep un missatge
+    executar diferents funcions depenen del missatge
+    @param MessageEvent e - rep un missatge 
+    */
     @Override
     public void onMessageReceived(MessageEvent e){
         
@@ -100,7 +94,10 @@ public class Droids extends TeamRobot implements Droid{
         
         
     }
-    
+     /*
+    Funcio per disparar un enemic
+    @param -
+    */
     public void disparar_enemic(){
         
         double angle = Math.toDegrees(Math.atan2(destiX - getX(), destiY - getY()));
@@ -115,7 +112,10 @@ public class Droids extends TeamRobot implements Droid{
         
     }
     
-    
+    /*
+    Funcio d'atacar un enemic de forma raming 
+    @param -
+    */
     public void atac_raming(){
         
         if(destiX!=-1 && destiY!=-1){
@@ -125,13 +125,17 @@ public class Droids extends TeamRobot implements Droid{
 
             ahead(distanciadesti);
           
-            /*if(distanciadesti>3){ //si lluny ram- fer voltes voltant d'un punt
+            if(distanciadesti>3){ //si lluny ram- fer voltes voltant d'un punt
                 ram();
-            }*/
+            }
             
         }
     }
     
+    /*
+    Funcio per atacar de forma ramming
+    @param -
+    */
     //girar 5 vegades en el punt desti donat- intentar matar enemic
     public void ram(){
         double angle = Math.toDegrees(Math.atan2(destiX - getX(), destiY - getY()));
@@ -150,23 +154,43 @@ public class Droids extends TeamRobot implements Droid{
         
     }
     
+    /*
+    Funcio quan un robot droid es tocat per una bala
+    @param HitByBulletEvent e - li toca una bala 
+    */
     @Override
     public void onHitByBullet(HitByBulletEvent e){
-        
+        turnLeft(90+e.getBearing());
+        ahead(1000);
     }
     
+    /*
+    Funcio quan un robot droid toca un altre robot amb una bala
+    @param BulletHitEvent e - toca una la seva bala a un robot
+    */
     @Override
     public void onBulletHit(BulletHitEvent e){
-        
+        String nom = e.getName();
+    
+        if (nom.startsWith("equip_droids_leader.Droids")) {
+        out.println("Teammate " + nom + " disparat.");
+        } 
+        else {
+        out.println("Enemic " + nom + " disparat.");
+        }
     }
     
+    /*
+    Funcio quan un robot droid xoca toca un altre robot amb una bala
+    @param HitRobotEvent e - toca robot
+    */
     @Override
     public void onHitRobot(HitRobotEvent e){
         String nom=e.getName();
         if(nom.startsWith("equip_droids_leader.Droids") || nom.startsWith("equip_droids_leader.Leader")){
           turnRight(90);
           ahead(100);
-          direction *=-1;
+        
         }
         else{
             Coordenada enemic_disparar=new Coordenada("disparar_enemic",getX(),getY(),e.getBearing());
@@ -183,33 +207,16 @@ public class Droids extends TeamRobot implements Droid{
         }
     }
     
+    /*
+    Funcio quan un robot droid toca una paret
+    @param HitWallEvent e - toca paret
+    */
     @Override
     public void onHitWall(HitWallEvent e){
-    if (direction == -1 && Math.abs(e.getBearing()) >= 160.0) {
-      direction = 1;
-    } else if (direction == 1 && Math.abs(e.getBearing()) <= 20.0) {
-      direction = -1;
-    } else {
-      if (direction == 1) {
-        setTurnRight(normalRelativeAngleDegrees(e.getBearing()));
-        direction = -1;
-      } else {
-        setTurnRight(normalRelativeAngleDegrees(e.getBearing()+180));
-        direction = 1;
-      }
-    }
+        turnLeft(180);
+        ahead(1000);
+        
+        execute();   
     }
     
-    boolean xoc_paret(double r){
-        double maxX=getX() + getHeight()*r;
-        double minX=getX() - getHeight()*r;
-        double maxY=getY() + getHeight()*r;
-        double minY=getY() - getHeight()*r;
-        
-        boolean outX= maxX >= fieldX || minX <= 0.0;
-        boolean outY= maxY >= fieldY || minY <= 0.0;
-
-       return outX||outY;
-
-    }
 }
